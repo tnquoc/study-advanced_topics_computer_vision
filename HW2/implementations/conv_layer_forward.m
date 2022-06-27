@@ -29,20 +29,21 @@ function [output] = conv_layer_forward(input, layer, param)
     % Fill in the output datastructure with data, and the shape.
     output.data = zeros([h_out, w_out, num, batch_size]);
     for idx = 1:batch_size
-      data = reshape(input.data(:, idx), [h_in, w_in, c]);
-      convol_array = zeros([h_out, w_out, num]);
-      for n = 1:num
-        w = reshape(param.w(:, n), [k, k, c]);
-        b = param.b(:, n);
-        for i = 1:h_out
-          for j = 1:w_out
-            region = data(i:i+k-1, j:j+k-1, :);
-            convol_array(i, j, n) = sum(times(region, w)(:)) + b;
-          endfor
+        data = reshape(input.data(:, idx), [h_in, w_in, c]);
+        convol_array = zeros([h_out, w_out, num]);
+        for n = 1:num
+            w = reshape(param.w(:, n), [k, k, c]);
+            b = param.b(:, n);
+            for i = 1:h_out
+                for j = 1:w_out
+                    region = data(i:i+k-1, j:j+k-1, :);
+                    convol_array(i, j, n) = sum(times(region, w)(:)) + b;
+                endfor
+            endfor
         endfor
-      endfor
-      output.data(:, :, :, idx) = convol_array;
+        output.data(:, :, :, idx) = convol_array;
     endfor
+    
     output.data = reshape(output.data, [h_out*w_out*num, batch_size]);
 end
 
