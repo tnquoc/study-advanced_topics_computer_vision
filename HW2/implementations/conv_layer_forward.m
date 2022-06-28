@@ -18,6 +18,11 @@ function [output] = conv_layer_forward(input, layer, param)
     h_out = (h_in + 2*pad - k) / stride + 1;
     w_out = (w_in + 2*pad - k) / stride + 1;
 
+    output.height = h_out;
+    output.width = w_out;
+    output.channel = num;
+    output.batch_size = batch_size;
+
     assert(h_out == floor(h_out), 'h_out is not integer')
     assert(w_out == floor(w_out), 'w_out is not integer')
     input_n.height = h_in;

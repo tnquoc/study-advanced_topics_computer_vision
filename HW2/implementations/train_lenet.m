@@ -2,6 +2,8 @@ clear
 rand('seed', 100000)
 randn('seed', 100000)
 
+pkg load image
+
 %% Network defintion
 layers = get_lenet();
 
@@ -66,17 +68,17 @@ for iter = 1 : max_iter
     [cp, param_grad] = conv_net(params, layers, x_batch, y_batch);
 
     for l_idx = 1:length(layers)-1
-	% We have different epsilons for w and b. Calling get_lr and sgd_momentum twice.
-	w_rate = get_lr(iter, epsilon*w_lr, gamma, power);
-	[w_params, w_params_winc] = sgd_momentum(w_rate, mu, weight_decay, params, param_winc, param_grad);
+        % We have different epsilons for w and b. Calling get_lr and sgd_momentum twice.
+        w_rate = get_lr(iter, epsilon*w_lr, gamma, power);
+        [w_params, w_params_winc] = sgd_momentum(w_rate, mu, weight_decay, params, param_winc, param_grad);
 
-	b_rate = get_lr(iter, epsilon*b_lr, gamma, power);
-	[b_params, b_params_winc] = sgd_momentum(b_rate, mu, weight_decay, params, param_winc, param_grad);
+        b_rate = get_lr(iter, epsilon*b_lr, gamma, power);
+        [b_params, b_params_winc] = sgd_momentum(b_rate, mu, weight_decay, params, param_winc, param_grad);
 
-	params{l_idx}.w = w_params{l_idx}.w;
-	params_winc{l_idx}.w = w_params_winc{l_idx}.w;
-	params{l_idx}.b = b_params{l_idx}.b;
-	params_winc{l_idx}.b = b_params_winc{l_idx}.b;
+        params{l_idx}.w = w_params{l_idx}.w;
+        params_winc{l_idx}.w = w_params_winc{l_idx}.w;
+        params{l_idx}.b = b_params{l_idx}.b;
+        params_winc{l_idx}.b = b_params_winc{l_idx}.b;
     end
     if mod(iter, display_interval) == 0
         fprintf('cost = %f training_percent = %f\n', cp.cost, cp.percent);
