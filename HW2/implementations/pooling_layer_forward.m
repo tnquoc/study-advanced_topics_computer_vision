@@ -27,16 +27,13 @@ function [output] = pooling_layer_forward(input, layer)
         pooling_values = [];
         for i = 1:stride:(h_in + 2*pad)
             for j = 1:stride:(w_in + 2*pad)
-                mat = data(i:i+k-1, j:j+k-1, :);
-                if size(mat)(1) == k & size(mat)(2) == k
-                    max_values = reshape(max(max(mat, [], 2), [], 1), [1, c]);
-                    pooling_values = [pooling_values; max_values];
-                endif
-            endfor
-        endfor
-        pooling_values =  reshape(pooling_values, [h_out, w_out, c]);
-        output.data(:, :, :, idx) =  pooling_values;
-    endfor
+                mat = data(j:j+k-1, i:i+k-1, :);
+                max_value = max(max(mat, [], 2), [], 1);
+                pooling_values = [pooling_values, max_value];
+            end
+        end
+        output.data(:, :, :, idx) =  reshape(pooling_values, [h_out, w_out, c]);
+    end
 
     output.data = reshape(output.data, [h_out*w_out*c, batch_size]);
 end

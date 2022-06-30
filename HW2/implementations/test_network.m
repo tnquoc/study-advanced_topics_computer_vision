@@ -8,7 +8,7 @@ fullset = false;
 [xtrain, ytrain, xvalidate, yvalidate, xtest, ytest] = load_mnist(fullset);
 
 % load the trained weights
-load lenet.mat
+load lenet_test.mat
 
 %% Testing the network
 % Modify the code to get the confusion matrix

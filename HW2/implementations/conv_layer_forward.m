@@ -42,13 +42,13 @@ function [output] = conv_layer_forward(input, layer, param)
             for i = 1:h_out
                 for j = 1:w_out
                     region = data(i:i+k-1, j:j+k-1, :);
+                    % convol_array(i, j, n) = sum(times(region, w), 'all') + b;
                     convol_array(i, j, n) = sum(times(region, w)(:)) + b;
-                endfor
-            endfor
-        endfor
+                end
+            end
+        end
         output.data(:, :, :, idx) = convol_array;
-    endfor
-    
+    end
+
     output.data = reshape(output.data, [h_out*w_out*num, batch_size]);
 end
-

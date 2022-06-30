@@ -2,6 +2,7 @@ clear
 rand('seed', 100000)
 randn('seed', 100000)
 
+% pkg load image
 pkg load image
 
 %% Network defintion
@@ -26,10 +27,10 @@ weight_decay = 0.0005;
 w_lr = 1;
 b_lr = 2;
 
-test_interval = 500;
+test_interval = 5;
 display_interval = 100;
-snapshot = 500;
-max_iter = 3000;
+snapshot = 50;
+max_iter = 200;
 no_epochs = 100;
 
 %% Use the following to train from scratch
@@ -37,7 +38,7 @@ params = init_convnet(layers);
 
 
 %% Load the network
-##load lenet_pretrained.mat
+load lenet_pretrained.mat
 
 param_winc = params;
 for l_idx = 1:length(layers)-1
@@ -53,7 +54,7 @@ ytrain = ytrain(:, new_order);
 curr_batch = 1;
 
 for iter = 1 : max_iter
-
+    tic;
     if (curr_batch > m_train)
         new_order = randperm(m_train);
         xtrain = xtrain(:, new_order);
@@ -80,6 +81,8 @@ for iter = 1 : max_iter
         params{l_idx}.b = b_params{l_idx}.b;
         params_winc{l_idx}.b = b_params_winc{l_idx}.b;
     end
+    t = toc;
+    fprintf('iter %d | cost = %f | training_percent = %f | time %f s\n', iter, cp.cost, cp.percent, t);
     if mod(iter, display_interval) == 0
         fprintf('cost = %f training_percent = %f\n', cp.cost, cp.percent);
     end
@@ -91,7 +94,7 @@ for iter = 1 : max_iter
 
     end
     if mod(iter, snapshot) == 0
-        filename = 'lenet.mat';
+        filename = 'lenet_test.mat';
         save(filename, 'params');
     end
 end

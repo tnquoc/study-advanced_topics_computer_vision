@@ -9,7 +9,6 @@ function [output] = inner_product_forward(input, layer, param)
     output.width = 1;
     output.channel = layer.num;
     output.batch_size = input.batch_size;
-
     output.data = transpose(param.w) * input.data + repmat(param.b(:, 1), layer.num, k);
-
+    
 end
